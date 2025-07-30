@@ -46,7 +46,7 @@ easily drag and drop from toolbox.
 
 ---
 
-```csharp
+```
 donutChart1.Data.Add(new DonutSlice { Label = "Red", Value = 40f, Color = Color.Red });
 donutChart1.Data.Add(new DonutSlice { Label = "Blue", Value = 30f, Color = Color.Blue });
 donutChart1.Data.Add(new DonutSlice { Label = "Green", Value = 30f, Color = Color.Green }); 
@@ -57,7 +57,7 @@ donutChart1.Data.Add(new DonutSlice { Label = "Green", Value = 30f, Color = Colo
 
 ---
 
-```csharp
+```
 donutChart1.DonutThicknessRatio = 0.35f;
 donutChart1.BackColor = Color.Transparent;
 donutChart1.Dock = DockStyle.Fill;
