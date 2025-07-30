@@ -94,35 +94,35 @@ namespace Donut
 
         protected override void OnPaintBackground(PaintEventArgs e)
         {
-            // 1) Tasarım zamanı (DesignMode) kontrolü
+            
             bool designMode = LicenseManager.UsageMode == LicenseUsageMode.Designtime
                            || (this.Site != null && this.Site.DesignMode);
             if (designMode)
             {
-                // Designer’da normal arka planı çiz
+                
                 base.OnPaintBackground(e);
                 return;
             }
 
-            // 2) Sadece OverlayControl atandıysa ve BackColor transparent ise custom çizime izin ver
+          
             if (OverlayControl == null || this.BackColor != Color.Transparent)
             {
                 base.OnPaintBackground(e);
                 return;
             }
 
-            // 3) OverlayControl’ün görüntüsünü yakala ve kendi kontrol bölgen üzerinde çiz
+           
             using (var bmp = new Bitmap(OverlayControl.Width, OverlayControl.Height))
             {
                 OverlayControl.DrawToBitmap(bmp, new Rectangle(0, 0, bmp.Width, bmp.Height));
 
-                // OverlayControl ile kendi konum farkını hesapla
+                
                 Point thisScreen = this.PointToScreen(Point.Empty);
                 Point srcScreen = OverlayControl.PointToScreen(Point.Empty);
                 int offsetX = thisScreen.X - srcScreen.X;
                 int offsetY = thisScreen.Y - srcScreen.Y;
 
-                // Çizim için kaynak ve hedef dikdörtgenleri
+            
                 Rectangle srcRect = new Rectangle(offsetX, offsetY, this.Width, this.Height);
                 Rectangle destRect = new Rectangle(0, 0, this.Width, this.Height);
 
@@ -145,7 +145,7 @@ namespace Donut
             float total = _data.Sum(d => d.Value);
             if (total <= 0) return;
 
-            // --- Donut dış çemberi ---
+            
             int w = ClientSize.Width;
             int h = ClientSize.Height;
             int margin = 20;
@@ -172,7 +172,7 @@ namespace Donut
                 angle += sweep;
             }
 
-            // --- İç delik (hole) ---
+            
             float thickness = side * _donutThicknessRatio;
             var innerRect = new RectangleF(
                 outerRect.X + thickness,
@@ -181,12 +181,12 @@ namespace Donut
                 outerRect.Height - 2 * thickness
             );
 
-            // Panel veya OverlayControl'un BackColor'ı
+            
             Color holeColor = (OverlayControl ?? this.Parent)?.BackColor ?? this.BackColor;
             using (var holeBrush = new SolidBrush(holeColor))
                 g.FillEllipse(holeBrush, innerRect);
 
-            // --- Yüzdeleri yaz ---
+
             angle = -90f;
             using (var fontP = new Font("Segoe UI", 9f, FontStyle.Bold))
             using (var sf = new StringFormat { Alignment = StringAlignment.Center, LineAlignment = StringAlignment.Center })
@@ -215,7 +215,7 @@ namespace Donut
             }
 
             // --- Legend ---
-            float legendX = this.ClientSize.Width - 160;   // eğer sabit offset kullandıysan
+            float legendX = this.ClientSize.Width - 160;  
             float legendY = outerRect.Y;
             using (var fontL = new Font("Segoe UI", 9f, FontStyle.Bold))
             {
