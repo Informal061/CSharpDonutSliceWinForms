@@ -82,7 +82,11 @@ Each slice's percentage is dynamically calculated based on total value.
 
 Either create a class from visual studio and paste the code into your own created class or Clone the repository by
 
-git clone https://github.com/Informal061/CSharpDonutSliceWinForms.git and Open the solution or copy DonutChart.cs into your WinForms project.
+```
+git clone https://github.com/Informal061/CSharpDonutSliceWinForms.git 
+```
+
+And Open the solution or copy DonutChart.cs into your WinForms project.
 
 
 # 📄 License
