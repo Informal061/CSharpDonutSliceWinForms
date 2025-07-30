@@ -12,6 +12,8 @@ Ideal for modern UI dashboards or statistical visualizations where a clean circu
 - 📊 Auto-calculated percentages for each slice
 - 🖼️ Optional legend on the right showing labels + values
 - 🔁 Design-time editable via property grid (`List<DonutSlice>`)
+- 🧠 Compatible with **C# 6.0 and later**
+- 💻 Supports **.NET Framework 4.6+** and **.NET Core / .NET 5+**
 
 ---
 
