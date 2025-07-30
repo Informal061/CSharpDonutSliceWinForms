@@ -72,7 +72,7 @@ donutChart1.Dock = DockStyle.Fill;
 ### Transparent Background Handling:
 Uses OverlayControl or Parent to draw background under the donut.
 
-###Legend Rendering:
+### Legend Rendering:
 Automatically placed to the right of the chart with label + value + percentage.
 
 ### Auto Percentage Calculation:
