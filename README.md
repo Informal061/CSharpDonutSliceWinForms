@@ -16,7 +16,7 @@ Ideal for modern UI dashboards or statistical visualizations where a clean circu
 ---
 
 
-### DonutChart.cs
+## DonutChart.cs
 A custom UserControl that draws the donut chart with all visual elements and properties like:
 
 Data: List<DonutSlice>
@@ -26,10 +26,10 @@ DonutThicknessRatio
 OverlayControl (for transparency effect to show background.)
 
 
-### 🚀 How to Use
+# 🚀 How to Use
 
 
-## Step 1: Add to your Form 
+### Step 1: Add to your Form 
 
 ---
 
@@ -44,7 +44,7 @@ easily drag and drop from toolbox.
 
 ---
 
-## Step 2: Add Data
+### Step 2: Add Data
 
 ---
 
@@ -55,7 +55,7 @@ donutChart1.Data.Add(new DonutSlice { Label = "Green", Value = 30f, Color = Colo
 ```
 ---
 
-## Step 3: Customize Appearance (Optional)
+### Step 3: Customize Appearance (Optional)
 
 ---
 
@@ -67,30 +67,30 @@ donutChart1.Dock = DockStyle.Fill;
 
 ---
 
-### ADVANCED
+# ADVANCED
 
-# Transparent Background Handling:
+### Transparent Background Handling:
 Uses OverlayControl or Parent to draw background under the donut.
 
-# Legend Rendering:
+###Legend Rendering:
 Automatically placed to the right of the chart with label + value + percentage.
 
-# Auto Percentage Calculation:
+### Auto Percentage Calculation:
 Each slice's percentage is dynamically calculated based on total value.
 
-### 🛠️ Installation
+# 🛠️ Installation
 
 Either create a class from visual studio and paste the code into your own created class or Clone the repository by
 
 git clone https://github.com/Informal061/CSharpDonutSliceWinForms.git and Open the solution or copy DonutChart.cs into your WinForms project.
 
 
-### 📄 License
+# 📄 License
 
 This project is licensed under the MIT License.
 
 
-### 🙋‍♂️ Author
+# 🙋‍♂️ Author
 Developed by Informal061
 Feel free to fork, use, and contribute!
 
