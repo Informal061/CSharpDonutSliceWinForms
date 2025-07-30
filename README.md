@@ -41,7 +41,6 @@ DonutChart donutChart1 = new DonutChart();
 this.Controls.Add(donutChart1);
 ```
 
-OR
 
 Alternatively, use the toolbox to drag the control onto your form.
 
