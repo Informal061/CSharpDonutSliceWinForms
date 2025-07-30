@@ -43,7 +43,7 @@ this.Controls.Add(donutChart1);
 
 OR
 
-easily drag and drop from toolbox.
+Alternatively, use the toolbox to drag the control onto your form.
 
 ---
 
