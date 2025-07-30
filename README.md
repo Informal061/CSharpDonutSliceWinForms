@@ -33,8 +33,10 @@ OverlayControl (for transparency effect to show background.)
 
 ---
 
+```
 DonutChart donutChart1 = new DonutChart();
 this.Controls.Add(donutChart1);
+```
 
 OR
 
