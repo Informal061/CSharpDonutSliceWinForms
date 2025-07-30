@@ -54,6 +54,9 @@ Alternatively, use the toolbox to drag the control onto your form.
 donutChart1.Data.Add(new DonutSlice { Label = "Red", Value = 40f, Color = Color.Red });
 donutChart1.Data.Add(new DonutSlice { Label = "Blue", Value = 30f, Color = Color.Blue });
 donutChart1.Data.Add(new DonutSlice { Label = "Green", Value = 30f, Color = Color.Green }); 
+
+🔧 Alternatively, donut slices can be added and edited at **design time** via the **Properties panel** in Visual Studio, using the built-in collection editor for the `Data` property.
+
 ```
 ---
 
