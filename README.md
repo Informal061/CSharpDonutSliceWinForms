@@ -17,6 +17,9 @@ Ideal for modern UI dashboards or statistical visualizations where a clean circu
 
 
 ## DonutChart.cs
+
+![Donut Chart Example](docs/Donut.png)
+
 A custom UserControl that draws the donut chart with all visual elements and properties like:
 
 Data: List<DonutSlice>
