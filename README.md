@@ -22,11 +22,11 @@ Ideal for modern UI dashboards or statistical visualizations where a clean circu
 
 A custom UserControl that draws the donut chart with all visual elements and properties like:
 
-Data: List<DonutSlice>
+* Data: List<DonutSlice>
 
-DonutThicknessRatio
+* DonutThicknessRatio
 
-OverlayControl (for transparency effect to show background.)
+* OverlayControl (for transparency effect to show background.)
 
 
 # 🚀 How to Use
