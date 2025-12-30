@@ -232,6 +232,17 @@ namespace pdf
         return false;
     }
 
+    static double cubicInterpolate(double p0, double p1, double p2, double p3, double t)
+    {
+        double t2 = t * t;
+        double t3 = t2 * t;
+
+        return 0.5 * ((2.0 * p1) +
+                      (-p0 + p2) * t +
+                      (2.0 * p0 - 5.0 * p1 + 4.0 * p2 - p3) * t2 +
+                      (-p0 + 3.0 * p1 - 3.0 * p2 + p3) * t3);
+    }
+
     // =====================================================
     // Function Type 0 - Sampled Function
     // =====================================================
@@ -278,6 +289,13 @@ namespace pdf
 
         int bitsPerSample = bpsObj ? (int)bpsObj->value : 8;
         LogDebug("BitsPerSample: %d", bitsPerSample);
+
+        // Order (optional)
+        visited.clear();
+        auto orderObj = std::dynamic_pointer_cast<PdfNumber>(
+            doc->resolve(funcDict->get("/Order"), visited));
+        int interpolationOrder = orderObj ? (int)orderObj->value : 1;
+        LogDebug("Interpolation Order: %d", interpolationOrder);
 
         // Range (required for gradient) - output value range
         visited.clear();
@@ -382,9 +400,10 @@ namespace pdf
 
         LogDebug("maxSampleValue: %.0f, bytesPerEntry: %d", maxSampleValue, bytesPerEntry);
 
-        // Tüm sample'ları oku ve stops olarak ekle
-        // Önceki implementasyon sadece uç noktaları ve en parlak noktayı alıyordu,
-        // bu da highlight'ın şeklini ve yayılımını bozuyordu.
+        // Tüm ham sample değerlerini oku
+        std::vector<std::vector<double>> rawSamples;
+        rawSamples.reserve(numSamples);
+
         for (int sampleIdx = 0; sampleIdx < numSamples; ++sampleIdx)
         {
             int offset = sampleIdx * bytesPerEntry;
@@ -402,11 +421,68 @@ namespace pdf
                 double normalized = rawValue / maxSampleValue;
                 outputValues[c] = decodeMin[c] + normalized * (decodeMax[c] - decodeMin[c]);
             }
+            rawSamples.push_back(outputValues);
+        }
 
-            GradientStop stop;
-            stop.position = (numSamples > 1) ? (double)sampleIdx / (numSamples - 1) : 0.0;
-            colorToRGB(outputValues.data(), outputComponents, stop.rgb);
-            outStops.push_back(stop);
+        if (rawSamples.empty()) return false;
+
+        // Order 3 (Cubic) ise upsampling yap
+        if (interpolationOrder == 3 && numSamples >= 4)
+        {
+            // Her segmenti N parçaya böl
+            const int subSteps = 4;
+
+            for (int i = 0; i < numSamples - 1; ++i)
+            {
+                // Control points for Catmull-Rom
+                // p0, p1 (current), p2 (next), p3
+                int idx0 = std::max(0, i - 1);
+                int idx1 = i;
+                int idx2 = std::min(numSamples - 1, i + 1);
+                int idx3 = std::min(numSamples - 1, i + 2);
+
+                const auto& p0 = rawSamples[idx0];
+                const auto& p1 = rawSamples[idx1];
+                const auto& p2 = rawSamples[idx2];
+                const auto& p3 = rawSamples[idx3];
+
+                for (int s = 0; s < subSteps; ++s)
+                {
+                    double t = (double)s / subSteps;
+
+                    // Global pozisyon
+                    double globalT = (double)(i * subSteps + s) / ((numSamples - 1) * subSteps);
+
+                    std::vector<double> interpolated(outputComponents);
+                    for(int c=0; c<outputComponents; ++c)
+                    {
+                        interpolated[c] = cubicInterpolate(p0[c], p1[c], p2[c], p3[c], t);
+                        // Clamp
+                        interpolated[c] = std::clamp(interpolated[c], decodeMin[c], decodeMax[c]);
+                    }
+
+                    GradientStop stop;
+                    stop.position = globalT;
+                    colorToRGB(interpolated.data(), outputComponents, stop.rgb);
+                    outStops.push_back(stop);
+                }
+            }
+            // Son noktayı ekle
+            GradientStop lastStop;
+            lastStop.position = 1.0;
+            colorToRGB(rawSamples.back().data(), outputComponents, lastStop.rgb);
+            outStops.push_back(lastStop);
+        }
+        else
+        {
+            // Linear (Order 1) veya çok az sample varsa direkt ekle
+            for (int i = 0; i < (int)rawSamples.size(); ++i)
+            {
+                GradientStop stop;
+                stop.position = (numSamples > 1) ? (double)i / (numSamples - 1) : 0.0;
+                colorToRGB(rawSamples[i].data(), outputComponents, stop.rgb);
+                outStops.push_back(stop);
+            }
         }
 
         if (outStops.empty()) return false;
